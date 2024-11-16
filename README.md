@@ -1,6 +1,25 @@
-# Welcome to Remix!
+# Welcome to Simple Client Censys!
 
-- 📖 [Remix docs](https://remix.run/docs)
+Based on the requirements [here](https://app2.greenhouse.io/tests/bbd476491d5c5ba70b3d0e65de12c200?utm_medium=email&utm_source=TakeHomeTest), this service is a simple Remix client that loads the main search bar in the main home page. 
+
+Based on the search query, response from [Censys Search APIv2](https://search.censys.io/api)'s `/v2/hosts/search` endpoint is processed and hosts are listed in the child component.
+
+When the host list is rendered, it also includes pagination capability, which appends a query param `cursor` to fetch the response, while keeping the current query param `q` as is in the URL.
+
+Not much CSS is added to the application, since I ended up spending a lot of time on the functionality and familiarizing with Remix framework.
+
+## Testing Step
+
+Unfortunately, I could not add either unit test and functional test
+
+But, here is the step where you can test the functionality with the application
+
+1. in the terminal, run the dev server:
+```
+npm run dev
+```
+2. main page will display a title and below is a search bar
+3. 
 
 ## Development
 
