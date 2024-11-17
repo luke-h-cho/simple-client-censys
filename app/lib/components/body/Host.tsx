@@ -5,8 +5,8 @@ export default function Host({host} : any){
     <div className="host" key={host.ip}>
       <hr/>
       <h3 className="text-sky-500"> {host.ip}{}</h3>
-      {host.services.map((service: any) => {
-        return <Port host={host} service={service} />
+      {host.services.map((service: any, index: number) => {
+        return <Port key={index} host={host} service={service} />
       })}
     </div>
   )

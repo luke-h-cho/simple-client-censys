@@ -14,10 +14,3 @@ export interface FailedRes {
   status: string,
   error: string
 }
-
-export interface Res {
-  code: number,
-  status: string,
-  error?: string,
-  result?: any
-}

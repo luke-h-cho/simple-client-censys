@@ -1,13 +1,22 @@
 import { Form } from "@remix-run/react";
 
-export default function Pagination({ res } : any){
+interface Cursors {
+  prev: string,
+  next: string
+}
+interface PaginationProps {
+  cursors: Cursors,
+  query: string
+}
+
+export default function Pagination({ cursors, query } : PaginationProps){
   return (
     <Form method="get">
-      <input defaultValue={(document.getElementById("query") as HTMLInputElement).value} name="q" hidden={true}/>
-      <button name="cursor" type="submit" aria-label="previous" value={res.result.links.prev} disabled={!!!res.result.links.prev}>
+      <input defaultValue={query} name="q" hidden={true}/>
+      <button name="cursor" type="submit" aria-label="previous" value={cursors.prev} disabled={!!!cursors.prev}>
         Prev
       </button>
-      <button name="cursor" type="submit" aria-label="next" value={res.result.links.next}>
+      <button name="cursor" type="submit" aria-label="next" value={cursors.next} disabled={!!!cursors.next}>
         Next
       </button>
     </Form>

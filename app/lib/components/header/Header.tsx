@@ -1,7 +1,12 @@
+import SearchBar from "./SearchBar";
+
 export default function Header() {
   return (
-    <h1 className="leading text-2xl font-bold">
-      Welcome to the uglified Censys Search
-    </h1>
+    <div>
+      <h1 className="leading text-2xl font-bold">
+        Welcome to the uglified Censys Search
+      </h1>
+      <SearchBar />
+    </div>
   )
 }

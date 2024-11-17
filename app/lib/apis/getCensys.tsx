@@ -24,30 +24,31 @@ const commonHeader = new Headers({
  */
 export const fetchCensys = async ({query, cursor}: CensysRequest) => {
   // appending two main query params, q and cursor (if exists), for the scope
-  let url = `${BASE_URL}${SEARCH_ENDPOINT_V2}?q=123123`;
+  let url = `${BASE_URL}${SEARCH_ENDPOINT_V2}?q=${query}`;
 
   if (cursor) {
     url += `&cursor=${cursor}`;
   }
 
   // calling censys api
-  try{
+  try {
     const res = await fetch(url, {
       headers: commonHeader,
     });
 
     if (!res.ok){
       // if the response is 400s
-      console.error("failed res");
-      throw new Error("censys search failed with code " + res.statusText);
+      console.error("failed res with status code ", res.status);
+    } else {
+      // if the response is successful
+      console.log("success res");
     }
 
-    // if the response is successful
-    console.log("success res");
+    // return the response - if there is an error, it will be handled in the route
     return await res.json();
-  } 
-  catch(err) {
+  } catch(err) {
     // if there is error attempting to fetch
-    console.error("error in fetching", err);
+    console.error("error in fetching for some reason: ", err);
+    throw err;
   }
 }
