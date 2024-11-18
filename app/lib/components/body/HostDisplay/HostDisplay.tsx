@@ -1,5 +1,5 @@
-import Host from "./Host";
-import Pagination from "./Pagination";
+import Host from "../Host/Host";
+import Pagination from "../Pagination/Pagination";
 import { SuccessRes} from "~/lib/type/type";
 
 interface HostDisplayProps {

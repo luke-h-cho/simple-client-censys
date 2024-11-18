@@ -1,4 +1,4 @@
-import Port from "./Port"
+import Port from "../Port/Port";
 
 export default function Host({host} : any){
   return (
