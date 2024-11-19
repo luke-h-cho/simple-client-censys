@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import Header from "./lib/components/header/Header/Header";
 
 import "./tailwind.css";
 
@@ -41,5 +42,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <div id="root">
+      <Header/>
+      <hr/>
+      <Outlet/>
+    </div>
+  )
 }
