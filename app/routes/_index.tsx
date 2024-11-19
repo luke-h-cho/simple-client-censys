@@ -1,8 +1,8 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useNavigation, useRouteError, useSearchParams } from "@remix-run/react";
 
-import HostDisplay from "~/lib/components/body/HostDisplay";
-import { CensysRequest, fetchCensys } from "~/lib/apis/getCensys";
+import HostDisplay from "~/lib/components/body/HostDisplay/HostDisplay";
+import { CensysRequest, fetchCensys } from "~/lib/apis/getCensys/getCensys";
 import { SuccessRes } from "~/lib/type/type";
 
 // if necssary parameters exists, it will use params to append in URL to fetch the data it needs to render the search
@@ -67,7 +67,7 @@ export function ErrorBoundary() {
   // any other errors
   return (
     <div id="error">
-      {(error as Error).message}
+      {"Unknown Internal Error: " + (error as Error).message}
     </div>
   )
 

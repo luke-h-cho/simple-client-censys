@@ -3,18 +3,19 @@ export interface CensysRequest {
   cursor: string | null
 }
 
-const BASE_URL = "https://search.censys.io";
-const SEARCH_ENDPOINT_V2 = "/api/v2/hosts/search";
+// including fallback for easy testing
+const BASE_URL = process.env.CENSYS_SEARCH_API_BASE_URL || "https://search.censys.io";
+const SEARCH_ENDPOINT_V2 = process.env.CENSYS_SEARCH_HOST_URL_V2 || "/api/v2/hosts/search";
 
 // setting up valid headers for the API call
 const basicAuth = 'Basic ' + btoa(`${process.env.CENSYS_API_ID}:${process.env.CENSYS_API_KEY}`);
-const commonHeader = new Headers({
+const commonHeader = {
   "Authorization": basicAuth,
   "Content-Type": "application/json;v1",
   "Connection": "keep-alive",
   "Accept": "*/*",
   "Accept-Encoding": "gzip, deflate, br"
-});
+};
 
 // calling the Censys API by configuring required headers and URL
 /**
@@ -33,7 +34,7 @@ export const fetchCensys = async ({query, cursor}: CensysRequest) => {
   // calling censys api
   try {
     const res = await fetch(url, {
-      headers: commonHeader,
+      headers: new Headers(commonHeader),
     });
 
     if (!res.ok){

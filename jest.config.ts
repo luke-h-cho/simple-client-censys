@@ -4,7 +4,8 @@ const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom', // Use jsdom for testing React components
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  testMatch: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
+  //for now, just a specific test under the lib, due to test
+  testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },

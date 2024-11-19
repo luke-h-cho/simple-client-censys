@@ -6,7 +6,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-import Header from "./lib/components/header/Header";
+import Header from "./lib/components/header/Header/Header";
 
 import "./tailwind.css";
 
