@@ -1,61 +1,96 @@
 # Welcome to Simple Client Censys!
 
-Based on the requirements [here](https://app2.greenhouse.io/tests/bbd476491d5c5ba70b3d0e65de12c200?utm_medium=email&utm_source=TakeHomeTest), this service is a simple Remix client that loads the main search bar in the main home page. 
+This service is a **simple Remix client** that implements a search functionality as outlined in the [project requirements](https://app2.greenhouse.io/tests/bbd476491d5c5ba70b3d0e65de12c200?utm_medium=email&utm_source=TakeHomeTest).
 
-Based on the search query, response from [Censys Search APIv2](https://search.censys.io/api)'s `/v2/hosts/search` endpoint is processed and hosts are listed in the child component.
+## Features
 
-When the initial search is successful and the host list is rendered, it also includes pagination capability, which appends a query param `cursor` to fetch the response, while keeping the current query param `q` as is in the URL.
+1. **Main Search Bar**
+   - Located on the home page.
+   - Fetches data from the [Censys Search APIv2](https://search.censys.io/api)'s `/v2/hosts/search` endpoint based on user input.
 
-If any of the fetching call has a problem and return an error or failed response, it will show error component, instead of the host list.
+2. **Host List Display**
+   - Results are rendered in a child component upon a successful query.
+   - Includes **pagination**, using a `cursor` query parameter to navigate through results while maintaining the original `q` parameter.
 
-Not much CSS is added to the application, since I ended up spending a lot of time on the functionality and familiarizing with Remix framework.
+3. **Error Handling**
+   - If any API request fails, an error component is displayed instead of the host list.
 
-## Testing Step
+4. **Minimal Styling**
+   - Basic styling only, as development time was primarily spent on functionality and learning the Remix framework.
 
-### For unit test, run the command below to run:
-  ```shellscript
-  npm test
-  ```
-  - the command will run the test and display the testing result with a line coverage %, etc
-  - currently, due to some unresolved bug, trying to import remix's utilities with Jest, some files will fail (`route/_index.test.tsx`, `root.test.tsx`, `Pagination.test.tsx`, `SearchBar.text.tsx`)
-    [github issue](https://github.com/remix-run/remix/issues/8481#issuecomment-2425051833)
-    - Solution/To-do -> To convert unit tests into Vitest, instead of Jest
+<br/>
 
-### No functional test, but here is the step where you can test the functionality manually
+## Testing Instructions
 
-  1. in the terminal, run the dev server:
+### Unit Testing
+
+Run the following command to execute unit tests:
+
+```sh
+npm test
+```
+
+- The test results, including coverage percentage, will be displayed.
+- **Known Issue:** Some files fail due to incompatibilities with Remix utilities in Jest:
+  - `route/_index.test.tsx`
+  - `root.test.tsx`
+  - `Pagination.test.tsx`
+  - `SearchBar.test.tsx`
   
-  ```shellscript
-  npm run dev
-  ```
+  For more details, see this [GitHub issue](https://github.com/remix-run/remix/issues/8481#issuecomment-2425051833).
 
-  2. Go to the localhost that the application is running - home page will display a title and below is a search bar.
+- **Planned Improvement:** Convert tests to **Vitest** instead of Jest.
+---
+### Manual Testing
 
-  3. Application will behave different based on the initial query:
-      1. if the fetch somehow fails and run into an error without a valid response:
-          - should display the error boundary page of internal error and its message
-          - to test this, manipulate the URL address in the code, where the fetch is being called (getCensys.ts)
+#### Prerequisites
 
-      2. if the fetch request is made and error response is returned:
-          - should display the error boundary of failed response, along with the message
-          - list of all error types:
-              1. returned response is that query is invalid:
-                  - to test this, use `{}{}{|}{|#$%#$@}%{@|}{@|}{(*|}(%^` query to trigger invalid query error
-                      - this displays the code 422 (I think it should be 400, according to [API doc](https://search.censys.io/api#/hosts/searchHosts))
-              2. returned response is that basic token is invalid:
-                  - to test this, make sure the basic auth token (CENSYS_API_ID and CENSYS_API_KEY) is invalid
-                      - this displays the code 401
-              3. I do not know or want to trigger the too many request error - but if the response is received, it will behave the same as above errors
+1. Create a `.env` file with the following variables:
+    - **Required:** 
+        - `CENSYS_API_ID`
+        - `CENSYS_API_KEY`  
+          Obtain these from your [Censys account page](https://search.censys.io/account/api).
+    - **Optional:** 
+        - `CENSYS_SEARCH_API_BASE_URL`
+        - `CENSYS_SEARCH_HOST_URL_V2`
 
-      3. if the fetch request is made and success response is returned:
-          - should display HostDisplay.tsx below the search bar with the list of Hosts
-          - HostDisplay component should include pagination button
-              - Prev button is disabled, because prev cursor does not exist in the initial search
+2. Start the development server:
 
-  4. After initial query, it will display the list of Hosts, and the buttons at the bottom for pagination. Click the pagination button `Prev` and `Next`, to navigate the result of the query.
-      - if the cursor value is invalid, it will display an error component, similar to other errors from failed API responses:
-          - to test this, manipulate the cursor element's value assigned to pagination button manually, using dev tool
-              - this displays the code 422
+    ```sh
+      npm run dev
+    ``` 
+3. Access the application at the provided localhost URL.
+---
+### Functionality Walkthrough
+1. **Initial Query**
+   - Navigate to the home page to see the search bar.
+   - Submit a query to trigger API calls.
+
+   Based on the response:
+   - **Error Response (e.g., invalid query, invalid credentials):**
+     - An error boundary page with an appropriate message is displayed.
+   - **Successful Response:**
+     - A list of hosts is displayed beneath the search bar.
+     - The list includes pagination buttons.
+
+2. **Error Handling Scenarios**
+   - **Internal Error:** 
+     - Modify the fetch URL in `getCensys.ts` to simulate a failed API call.
+   - **Invalid Query:** 
+     - Use an invalid string such as `{}{}{|}{|#$%#$@}%{@|}`.  
+       - API response: `422 Unprocessable Entity` (should be `400 Bad Request` per [API docs](https://search.censys.io/api#/hosts/searchHosts)).
+   - **Invalid Credentials:** 
+     - Use incorrect `CENSYS_API_ID` and `CENSYS_API_KEY`.
+       - API response: `401 Unauthorized`.
+   - **Rate Limiting:** 
+     - Not explicitly tested, but similar error handling applies.
+
+3. **Pagination**
+   - Use `Next` and `Prev` buttons to navigate results:
+     - The `Prev` button is disabled on the first page (no previous cursor - `Next` button behaves the same at the last page).
+     - Manipulate the `cursor` parameter in the developer console to test error handling for invalid cursor values (`422 Unprocessible Entity`).
+
+
 
 ## Development
 
